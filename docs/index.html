@@ -73,6 +73,11 @@
     .tx-manuelle { background: #14532d; color: #86efac; }
     .tx-pdk      { background: #1e3a5f; color: #93c5fd; }
     .tx-autre    { background: #2d1e3a; color: #c4b5fd; }
+    .body-tag         { display: inline-block; padding: 2px 7px; border-radius: 4px;
+                        font-size: 11px; font-weight: 600; margin-left: 4px; white-space: nowrap; }
+    .body-tag-spider  { background: #3b1d5f; color: #c4b5fd; }
+    .body-tag-coupe   { background: #1e3a5f; color: #7dd3fc; }
+    .variante-cell    { white-space: nowrap; }
     .opts  { font-size: 11px; color: #94a3b8; max-width: 180px; }
     .expl  { font-size: 11px; color: #7dd3fc; max-width: 260px; }
     .vendeur { font-size: 11px; color: #94a3b8; }
@@ -126,6 +131,13 @@
       <option value="PDK">PDK</option>
     </select>
   </label>
+  <label>Carrosserie :
+    <select id="body-filter" onchange="filterRows()">
+      <option value="">Toutes</option>
+      <option value="Coupé">Coupé</option>
+      <option value="Spider">Spider</option>
+    </select>
+  </label>
   <label>Score min :
     <select id="score-filter" onchange="filterRows()">
       <option value="0">Tous</option>
@@ -148,7 +160,7 @@
         <th data-col="3">Prix</th>
         <th data-col="4">Km</th>
         <th data-col="5">Année</th>
-        <th data-col="6">Tx</th>
+        <th data-col="6">Variante</th>
         <th data-col="7">Couleur</th>
         <th class="no-sort">Options</th>
         <th class="no-sort">Analyse</th>
@@ -1485,6 +1497,10 @@ function renderTable(listings) {
     const opts  = (l.options_presentes || []).join(', ') || '—';
     const txCls = txClass(l.tx_clean);
     const txLbl = l.tx_clean || '—';
+    const bodyStyle = l.carrosserie || '';
+    const bodyTag = bodyStyle
+      ? `<span class="body-tag ${bodyStyle.toLowerCase() === 'spider' ? 'body-tag-spider' : 'body-tag-coupe'}">${bodyStyle}</span>`
+      : '';
     const vendeur = l.vendeur_nom && l.vendeur_nom !== '—' ? l.vendeur_nom : '—';
     const ville   = l.vendeur_ville ? `${l.vendeur_ville} (${l.vendeur_dept})` : '';
     const pays    = (l.pays || 'FR').toUpperCase();
@@ -1512,7 +1528,7 @@ function renderTable(listings) {
       <td class="prix">${fmtPrix(l.prix)}</td>
       <td>${fmtKm(l.km)}</td>
       <td>${l.annee || '—'}</td>
-      <td><span class="tx ${txCls}">${txLbl}</span></td>
+      <td class="variante-cell"><span class="tx ${txCls}">${txLbl}</span>${bodyTag}</td>
       <td>${l.couleur || '—'}</td>
       <td class="opts">${opts}</td>
       <td class="expl">${l.score_explication || ''}</td>
@@ -1580,6 +1596,7 @@ function filterRows() {
   const brand  = document.getElementById('brand-filter').value;
   const model  = document.getElementById('model-filter').value;
   const tx     = document.getElementById('tx-filter').value;
+  const body   = document.getElementById('body-filter').value;
   const minSc  = parseFloat(document.getElementById('score-filter').value) || 0;
   const q      = document.getElementById('search').value.toLowerCase().trim();
 
@@ -1587,6 +1604,7 @@ function filterRows() {
     if (brand  && l._brand    !== brand)  return false;
     if (model  && l._carKey   !== model)  return false;
     if (tx     && !l.tx_clean.includes(tx)) return false;
+    if (body   && l.carrosserie !== body) return false;
     if (l.score_global < minSc)           return false;
     if (q) {
       const hay = [l.couleur, l.score_explication, l.vendeur_nom, l.vendeur_ville,
