@@ -2327,14 +2327,17 @@ function openPriceModal(listingId) {
   const points = [];
 
   if (pc && pc.all_changes && pc.all_changes.length) {
-    // First known price (before any change)
+    // Point d'origine : first_seen (date du vieux JSON) + initial_price
+    // Si disponibles, ils donnent une date antérieure à changed_at du 1er changement
+    const firstDate  = pc.first_seen    ? new Date(pc.first_seen)    : new Date(pc.all_changes[0].changed_at);
+    const firstPrice = pc.initial_price != null ? pc.initial_price   : pc.all_changes[0].old_price;
     points.push({
-      date:  new Date(pc.all_changes[0].changed_at),
-      prix:  pc.all_changes[0].old_price,
+      date:  firstDate,
+      prix:  firstPrice,
       delta: null,
-      label: 'Prix initial'
+      label: 'Premier prix connu'
     });
-    // Each recorded change
+    // Chaque changement enregistré
     for (const ch of pc.all_changes) {
       points.push({
         date:  new Date(ch.changed_at),
@@ -2344,7 +2347,7 @@ function openPriceModal(listingId) {
       });
     }
   } else if (listing) {
-    // No history recorded — just the current price
+    // Pas d'historique — juste le prix actuel
     points.push({ date: new Date(), prix: listing.prix, delta: null, label: 'Prix actuel' });
   }
 
