@@ -110,7 +110,41 @@
   .badge-up   { display: inline-block; padding: 1px 5px; border-radius: 3px;
                 font-size: 9px; font-weight: 700; background: #431407; color: #fb923c;
                 margin-left: 4px; vertical-align: middle; }
+  .badge-date { display: inline-block; padding: 1px 4px; border-radius: 3px;
+                font-size: 9px; font-weight: 500; background: #1e293b; color: #475569;
+                margin-left: 2px; vertical-align: middle; }
   .diff-run-at { font-size: 10px; color: #475569; margin-left: auto; }
+
+  /* ── Price history modal ── */
+  .pm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+                z-index: 100; }
+  .pm-overlay.open { display: block; }
+  .pm-panel  { display: none; position: fixed; top: 0; right: 0; bottom: 0; width: 360px;
+               background: #1e293b; border-left: 1px solid #334155; z-index: 101;
+               flex-direction: column; overflow: hidden; }
+  .pm-panel.open { display: flex; }
+  .pm-header { padding: 18px 20px 14px; border-bottom: 1px solid #334155; flex-shrink: 0; }
+  .pm-header h3 { font-size: 14px; font-weight: 700; color: #f8fafc; margin: 0 0 4px; }
+  .pm-header p  { font-size: 11px; color: #64748b; margin: 0; }
+  .pm-close  { position: absolute; top: 14px; right: 16px; background: none; border: none;
+               color: #475569; font-size: 18px; cursor: pointer; padding: 4px 8px;
+               border-radius: 4px; line-height: 1; }
+  .pm-close:hover { color: #f8fafc; background: #334155; }
+  .pm-body   { padding: 20px; overflow-y: auto; flex: 1; }
+  .pm-spark  { margin-bottom: 20px; }
+  .pm-spark svg { width: 100%; height: 90px; display: block; }
+  .pm-table  { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pm-table th { color: #475569; font-size: 10px; font-weight: 600; text-transform: uppercase;
+                 letter-spacing: .05em; padding: 6px 8px; text-align: left;
+                 border-bottom: 1px solid #334155; }
+  .pm-table td { padding: 8px 8px; border-bottom: 1px solid #1e293b; color: #e2e8f0;
+                 vertical-align: middle; }
+  .pm-table tr:last-child td { border-bottom: none; }
+  .pm-table .delta-down { color: #4ade80; font-weight: 700; }
+  .pm-table .delta-up   { color: #fb923c; font-weight: 700; }
+  .pm-table .row-first  { color: #64748b; font-style: italic; }
+  .pm-current-price { font-size: 22px; font-weight: 800; color: #f8fafc; }
+  .pm-no-history { color: #475569; font-size: 12px; padding: 16px 0; text-align: center; }
   </style>
 </head>
 <body>
@@ -172,6 +206,12 @@
       <option value="70">≥ 70</option>
     </select>
   </label>
+  <label>Prix :
+    <select id="price-filter" onchange="filterRows()">
+      <option value="">Tous</option>
+      <option value="changed">Prix changé</option>
+    </select>
+  </label>
   <label><input id="search" placeholder="Couleur, options, vendeur…" oninput="filterRows()"></label>
   <span class="filter-count" id="filter-count"></span>
 </div>
@@ -207,137 +247,156 @@
 {
   "porsche_991_gt3_mkii": {
     "car_key": "porsche_991_gt3_mkii",
-    "run_at": "2026-03-31T09:52:00",
+    "run_at": "2026-04-05T18:48:00",
     "new": [
-      {
-        "id": "adde7034-fff1-4fd8-988a-9b6f154c6153",
-        "prix": 154900,
-        "km": 20800,
-        "couleur": "Blanc",
-        "carrosserie": null,
-        "vendeur_nom": "Dream Car Performance",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-pdk-origine-france-pack-clubsport-lift-ppf-essence-blanc-adde7034-fff1-4fd8-988a-9b6f154c6153",
-        "score_global": 74.6,
-        "score_explication": "Prix excellent | PDK | Lift | Clubsport | Baquets 918 | Chrono | 20,800km sweet spot | Blanc (malus)"
-      },
-      {
-        "id": "7f4233db-c161-4dc4-8b5d-4af03e6f8174",
-        "prix": 181991,
-        "km": 16679,
-        "couleur": "CRAIE",
-        "carrosserie": null,
-        "vendeur_nom": "WACK AUTOMOBILES",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-touring-4-0l-500-cv-premiere-main-essence-gris-7f4233db-c161-4dc4-8b5d-4af03e6f8174",
-        "score_global": 73.2,
-        "score_explication": "Prix correct | Manuelle +++ | Lift | Baquets 918 | PDLS+ | Chrono | Touring | 16,679km sweet spot | CRAIE (premium)"
-      },
-      {
-        "id": "2ac9d93f-d070-4dab-8f65-3adee343912e",
-        "prix": 189900,
-        "km": 20500,
-        "couleur": "Noir",
-        "carrosserie": null,
-        "vendeur_nom": "ELEVEN CARS",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-4-0i-gt3-touring-essence-noir-2ac9d93f-d070-4dab-8f65-3adee343912e",
-        "score_global": 64.2,
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Baquets 918 | Appuie-tête logo | Chrono | Touring | 20,500km sweet spot"
-      },
-      {
-        "id": "fb675a07-8551-44b8-97fc-f3b2e54feac1",
-        "prix": 154990,
-        "km": 31469,
-        "couleur": "Bleu",
-        "carrosserie": null,
-        "vendeur_nom": "Silver Lac SAS",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-gt3-clubsport-991-991-2-4-0-500-type-991-phase-2-cg-francaise-historique-complet-essence-bleu-fb675a07-8551-44b8-97fc-f3b2e54feac1",
-        "score_global": 74.6,
-        "score_explication": "Prix correct | Manuelle +++ | Lift | Clubsport | Baquets 918 | Cuir étendu | Chrono | 31,469km sweet spot"
-      },
-      {
-        "id": "b19ba0ce-e353-4346-97be-e202d4fda9e1",
-        "prix": 165900,
-        "km": 29200,
-        "couleur": "BLEU MIAMI",
-        "carrosserie": null,
-        "vendeur_nom": "CLUB SPORT RACING",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-4-0l-500cv-clubsport-pack-chrono-lift-essence-bleu-b19ba0ce-e353-4346-97be-e202d4fda9e1",
-        "score_global": 66.7,
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Chrono | 29,200km sweet spot"
-      },
-      {
-        "id": "76110eea-6f1b-4b4a-86be-4237cd0c1507",
-        "prix": 184990,
-        "km": 27240,
-        "couleur": "Noir",
-        "carrosserie": null,
-        "vendeur_nom": "AUTO DEALS",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-type-991-2-4-0-gt3-clubsport-500-ch-manuelle-sieges-918-approved-essence-noir-76110eea-6f1b-4b4a-86be-4237cd0c1507",
-        "score_global": 68.8,
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Clubsport | Baquets 918 | Surpiqûres | Jantes noires | Chrono | 27,240km sweet spot"
-      },
-      {
-        "id": "1cfd8620-61dd-43d7-8d4b-ef0ab97db4d3",
-        "prix": 169990,
-        "km": 17390,
-        "couleur": "Argent",
-        "carrosserie": null,
-        "vendeur_nom": "AutoScout24 Luxembourg",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-argent-1cfd8620-61dd-43d7-8d4b-ef0ab97db4d3",
-        "score_global": 75.1,
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Surpiqûres | PDLS+ | Appuie-tête logo | Chrono | 17,390km sweet spot"
-      },
-      {
-        "id": "905c3471-60eb-4b52-98f4-3e0710672c90",
-        "prix": 188490,
-        "km": 17000,
-        "couleur": "Rouge",
-        "carrosserie": null,
-        "vendeur_nom": "Quatre Vingt Dix Neuf",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-coupe-4-0-gt3-flat-6-500ch-manuelle-baquets-carbone-livraison-reprise-credit-essence-rouge-905c3471-60eb-4b52-98f4-3e0710672c90",
-        "score_global": 70.2,
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Clubsport | Baquets 918 | Pack Carbone | Surpiqûres | PDLS+ | Jantes noires | Chrono | 17,000km sweet spot"
-      },
       {
         "id": "6a6d45fb-78ba-4205-974e-cf25c347e247",
         "prix": 184606,
         "km": 3050,
-        "couleur": "Blanc",
+        "annee": 2018,
+        "couleur": null,
         "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 62.1,
         "vendeur_nom": "AutoScout24 Luxembourg",
+        "vendeur_ville": "Metz",
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-blanc-6a6d45fb-78ba-4205-974e-cf25c347e247",
-        "score_global": 71.8,
-        "score_explication": "Prix excellent | PDK | Lift | Clubsport | Baquets 918 | Surpiqûres | PDLS+ | PCCB | Appuie-tête logo | Chrono | 3,050km (faible km) | Blanc (malus)"
+        "score_explication": "Prix excellent | PDK | Clubsport | 3,050km (faible km)"
       },
       {
-        "id": "b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
-        "prix": 179980,
-        "km": 19800,
-        "couleur": "Bleu Graphite Métallisé",
+        "id": "52deea92-bf95-4e78-9d4f-ebb7526b5801",
+        "prix": 172900,
+        "km": 18900,
+        "annee": 2018,
+        "couleur": "Rouge Indien",
         "carrosserie": null,
-        "vendeur_nom": "Sitbon Automobiles",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-phase-2-gt3-4-0-500-pdk--graphite--26ke-doptions--pepita--lift--no-fap--991-2-essence-bleu-b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
-        "score_global": 75.0,
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Pack Carbone | Surpiqûres | PDLS+ | Jantes noires | Chrono | 19,800km sweet spot"
+        "tx_clean": "PDK",
+        "score_global": 76.3,
+        "vendeur_nom": "SELECT AUTOMOBILES",
+        "vendeur_ville": "Les Achards",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-porsche-991-gt3-4-0l-500ch-essence-rouge-52deea92-bf95-4e78-9d4f-ebb7526b5801",
+        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Surpiqûres | PDLS+ | Appuie-tête logo | Chrono | 18,900km sweet spot | Rouge Indien (ok)"
+      },
+      {
+        "id": "347a03f7-1462-495d-b4f0-c9abb3b7d08d",
+        "prix": 159900,
+        "km": 19400,
+        "annee": 2017,
+        "couleur": "Blanc",
+        "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 73.4,
+        "vendeur_nom": "CARS ONLY",
+        "vendeur_ville": "Cannes",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-coupe-991-4-0-500-gt3-essence-blanc-347a03f7-1462-495d-b4f0-c9abb3b7d08d",
+        "score_explication": "Prix excellent | PDK | Lift | Clubsport | Baquets 918 | Chrono | 19,400km sweet spot | Blanc (malus)"
       },
       {
         "id": "9bce9fe1-4886-4131-922a-bae5cedae2b4",
         "prix": 179900,
         "km": 14225,
-        "couleur": "Karminrot",
+        "annee": 2018,
+        "couleur": null,
         "carrosserie": null,
+        "tx_clean": "Manuelle",
+        "score_global": 63.4,
         "vendeur_nom": "AutoScout24 Luxembourg",
+        "vendeur_ville": "Metz",
         "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-pccb-approved-lift-led-no-opf-essence-rouge-9bce9fe1-4886-4131-922a-bae5cedae2b4",
-        "score_global": 72.4,
-        "score_explication": "Prix correct | Manuelle +++ | Lift | PTS | Pack Carbone | Surpiqûres | PDLS+ | PCCB | Chrono | Touring | Siège sport (malus) | 14,225km | Karminrot (PTS)"
+        "score_explication": "Prix correct | Manuelle +++ | Lift | PCCB | Touring | 14,225km"
+      },
+      {
+        "id": "76110eea-6f1b-4b4a-86be-4237cd0c1507",
+        "prix": 184990,
+        "km": 27240,
+        "annee": 2018,
+        "couleur": null,
+        "carrosserie": null,
+        "tx_clean": "Manuelle",
+        "score_global": 59.3,
+        "vendeur_nom": "AUTO DEALS",
+        "vendeur_ville": "Meyreuil",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-type-991-2-4-0-gt3-clubsport-500-ch-manuelle-sieges-918-approved-essence-noir-76110eea-6f1b-4b4a-86be-4237cd0c1507",
+        "score_explication": "Prix marché | Manuelle +++ | Clubsport | 27,240km sweet spot"
+      },
+      {
+        "id": "eb3649d5-8364-4f72-92c3-f53d62c9d24d",
+        "prix": 168990,
+        "km": 18682,
+        "annee": 2017,
+        "couleur": "Argent GT métallisé",
+        "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 70.4,
+        "vendeur_nom": "VOGEL DIFFUSION",
+        "vendeur_ville": "ENTZHEIM",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-gt3-500-cv-pdk-essence-argent-eb3649d5-8364-4f72-92c3-f53d62c9d24d",
+        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Chrono | 18,682km sweet spot | Argent GT métallisé (premium)"
+      },
+      {
+        "id": "7f4233db-c161-4dc4-8b5d-4af03e6f8174",
+        "prix": 181991,
+        "km": 16679,
+        "annee": 2018,
+        "couleur": null,
+        "carrosserie": null,
+        "tx_clean": "Manuelle",
+        "score_global": 62.8,
+        "vendeur_nom": "WACK AUTOMOBILES",
+        "vendeur_ville": "HAGUENAU",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-touring-4-0l-500-cv-premiere-main-essence-gris-7f4233db-c161-4dc4-8b5d-4af03e6f8174",
+        "score_explication": "Prix correct | Manuelle +++ | Touring | 16,679km sweet spot"
+      },
+      {
+        "id": "adde7034-fff1-4fd8-988a-9b6f154c6153",
+        "prix": 154900,
+        "km": 20800,
+        "annee": 2018,
+        "couleur": null,
+        "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 73.1,
+        "vendeur_nom": "Dream Car Performance",
+        "vendeur_ville": "SAINT LAURENT DU VAR",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-pdk-origine-france-pack-clubsport-lift-ppf-essence-blanc-adde7034-fff1-4fd8-988a-9b6f154c6153",
+        "score_explication": "Prix excellent | PDK | Lift | Clubsport | 20,800km sweet spot"
+      },
+      {
+        "id": "1cfd8620-61dd-43d7-8d4b-ef0ab97db4d3",
+        "prix": 169990,
+        "km": 17390,
+        "annee": 2018,
+        "couleur": null,
+        "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 62.3,
+        "vendeur_nom": "AutoScout24 Luxembourg",
+        "vendeur_ville": "Metz",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-argent-1cfd8620-61dd-43d7-8d4b-ef0ab97db4d3",
+        "score_explication": "Prix correct | PDK | Clubsport | 17,390km sweet spot"
+      },
+      {
+        "id": "b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
+        "prix": 179980,
+        "km": 19800,
+        "annee": 2017,
+        "couleur": null,
+        "carrosserie": null,
+        "tx_clean": "PDK",
+        "score_global": 61.3,
+        "vendeur_nom": "Sitbon Automobiles",
+        "vendeur_ville": "Saint-Egreve",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-phase-2-gt3-4-0-500-pdk--graphite--26ke-doptions--pepita--lift--no-fap--991-2-essence-bleu-b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
+        "score_explication": "Prix correct | PDK | Lift | 19,800km sweet spot"
       }
     ],
     "removed": [
       {
-        "id": "78ec65e5-7a21-424c-98e1-02c583079c4c",
-        "prix": 179900,
-        "km": 19510,
-        "vendeur_nom": "PORSCHE REIMS - AUTOSPHERE",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-4-0-500ch-gt3-pdk-essence-78ec65e5-7a21-424c-98e1-02c583079c4c"
+        "id": "fc02c38d-a431-4316-bd55-a05f91e29acc",
+        "prix": 185990,
+        "km": 23000,
+        "vendeur_nom": "THE SKY ROAD",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-911-gt3-touring-phase-2-4-0l-500cv-bmv6-essence-fc02c38d-a431-4316-bd55-a05f91e29acc"
       },
       {
         "id": "cdd234ce-9850-47d5-80b9-ac4631a0bd52",
@@ -347,27 +406,6 @@
         "url": "https://www.autoscout24.fr/offres/porsche-911-gt3-touring-essence-noir-cdd234ce-9850-47d5-80b9-ac4631a0bd52"
       },
       {
-        "id": "cd90ca8f-1c4c-484a-9ef7-595673654308",
-        "prix": 181991,
-        "km": 19069,
-        "vendeur_nom": "Stéphane Giraud Personal Shopper Automobile",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-gt3-touring-bv6-1ere-main-origine-france-essence-rouge-cd90ca8f-1c4c-484a-9ef7-595673654308"
-      },
-      {
-        "id": "51d90755-d5fc-4eb2-bf3e-810e8a38a04c",
-        "prix": 164900,
-        "km": 30600,
-        "vendeur_nom": "Simplicicar Nice",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-4-0i-clubsport-gt3-essence-bleu-51d90755-d5fc-4eb2-bf3e-810e8a38a04c"
-      },
-      {
-        "id": "0611b328-5170-4f74-b16f-e098077092bc",
-        "prix": 179900,
-        "km": 6900,
-        "vendeur_nom": "",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-4-0l-pdk-lift-essence-jaune-0611b328-5170-4f74-b16f-e098077092bc"
-      },
-      {
         "id": "850ccc55-d2ae-475a-b764-ed105810f6f2",
         "prix": 179980,
         "km": 19800,
@@ -375,18 +413,11 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-phase-2-gt3-4-0-500-pdk--graphite--26ke-doptions--pepita--lift--no-fap--991-2-essence-bleu-850ccc55-d2ae-475a-b764-ed105810f6f2"
       },
       {
-        "id": "a6a2dee9-6029-44f0-9caf-a38ddd47b60b",
-        "prix": 184605,
-        "km": 3050,
-        "vendeur_nom": "AutoScout24 Luxembourg",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-blanc-a6a2dee9-6029-44f0-9caf-a38ddd47b60b"
-      },
-      {
-        "id": "fc02c38d-a431-4316-bd55-a05f91e29acc",
-        "prix": 185990,
-        "km": 23000,
-        "vendeur_nom": "THE SKY ROAD",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-911-gt3-touring-phase-2-4-0l-500cv-bmv6-essence-fc02c38d-a431-4316-bd55-a05f91e29acc"
+        "id": "cd90ca8f-1c4c-484a-9ef7-595673654308",
+        "prix": 181991,
+        "km": 19069,
+        "vendeur_nom": "Stéphane Giraud Personal Shopper Automobile",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-gt3-touring-bv6-1ere-main-origine-france-essence-rouge-cd90ca8f-1c4c-484a-9ef7-595673654308"
       },
       {
         "id": "873d94ac-b06a-45f3-b405-11080e233740",
@@ -396,11 +427,25 @@
         "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-touring-essence-gris-873d94ac-b06a-45f3-b405-11080e233740"
       },
       {
-        "id": "75df6f18-8d94-48f7-a8a0-7f7ebd874285",
-        "prix": 184900,
-        "km": 14225,
+        "id": "78ec65e5-7a21-424c-98e1-02c583079c4c",
+        "prix": 179900,
+        "km": 19510,
+        "vendeur_nom": "PORSCHE REIMS - AUTOSPHERE",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-4-0-500ch-gt3-pdk-essence-78ec65e5-7a21-424c-98e1-02c583079c4c"
+      },
+      {
+        "id": "2fe75ec9-2e7a-4277-a0d7-aca6f6846e6a",
+        "prix": 169990,
+        "km": 12000,
+        "vendeur_nom": "AUTO EXCLUSIVE 67",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-type-991-gt3-touring-4-0-pdk-500-cv-essence-bleu-2fe75ec9-2e7a-4277-a0d7-aca6f6846e6a"
+      },
+      {
+        "id": "a6a2dee9-6029-44f0-9caf-a38ddd47b60b",
+        "prix": 184605,
+        "km": 3050,
         "vendeur_nom": "AutoScout24 Luxembourg",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-pccb-approved-lift-led-no-opf-essence-rouge-75df6f18-8d94-48f7-a8a0-7f7ebd874285"
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-blanc-a6a2dee9-6029-44f0-9caf-a38ddd47b60b"
       },
       {
         "id": "696bcbfc-5b1b-4bf0-9888-3870643a0d61",
@@ -408,6 +453,34 @@
         "km": 22162,
         "vendeur_nom": "Temps Libre",
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-cup-4-0-essence-bleu-696bcbfc-5b1b-4bf0-9888-3870643a0d61"
+      },
+      {
+        "id": "75df6f18-8d94-48f7-a8a0-7f7ebd874285",
+        "prix": 184900,
+        "km": 14225,
+        "vendeur_nom": "AutoScout24 Luxembourg",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-pccb-approved-lift-led-no-opf-essence-rouge-75df6f18-8d94-48f7-a8a0-7f7ebd874285"
+      },
+      {
+        "id": "0611b328-5170-4f74-b16f-e098077092bc",
+        "prix": 179900,
+        "km": 6900,
+        "vendeur_nom": "",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-4-0l-pdk-lift-essence-jaune-0611b328-5170-4f74-b16f-e098077092bc"
+      },
+      {
+        "id": "51d90755-d5fc-4eb2-bf3e-810e8a38a04c",
+        "prix": 164900,
+        "km": 30600,
+        "vendeur_nom": "Simplicicar Nice",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-4-0i-clubsport-gt3-essence-bleu-51d90755-d5fc-4eb2-bf3e-810e8a38a04c"
+      },
+      {
+        "id": "a3339820-e359-4785-9349-f426e5009874",
+        "prix": 159900,
+        "km": 19400,
+        "vendeur_nom": "CARS ONLY",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-coupe-991-4-0-500-gt3-essence-blanc-a3339820-e359-4785-9349-f426e5009874"
       }
     ],
     "price_changes": [
@@ -417,10 +490,26 @@
         "new_price": 179900,
         "delta_eur": -5000,
         "delta_pct": -2.7,
+        "last_change_at": "2026-03-31T09:52:00",
+        "all_changes": [
+          {
+            "id": 4,
+            "listing_id": "e1e9d29e-e540-4714-9d17-7655e751d1ae",
+            "car_key": "porsche_991_gt3_mkii",
+            "old_price": 184900,
+            "new_price": 179900,
+            "delta_eur": -5000,
+            "delta_pct": -2.7,
+            "changed_at": "2026-03-31T09:52:00",
+            "url": "https://www.autoscout24.fr/offres/porsche-911-991-991-2-gt3-clubsport-low-mileage-essence-gris-e1e9d29e-e540-4714-9d17-7655e751d1ae",
+            "vendeur_nom": "MECANICUS",
+            "vendeur_ville": "Paris"
+          }
+        ],
         "url": "https://www.autoscout24.fr/offres/porsche-911-991-991-2-gt3-clubsport-low-mileage-essence-gris-e1e9d29e-e540-4714-9d17-7655e751d1ae",
         "vendeur_nom": "MECANICUS",
-        "score_global": 67.3,
-        "couleur": "GRIS C"
+        "score_global": 57.8,
+        "couleur": null
       },
       {
         "id": "fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
@@ -428,10 +517,26 @@
         "new_price": 164900,
         "delta_eur": -5000,
         "delta_pct": -2.94,
+        "last_change_at": "2026-03-31T09:52:00",
+        "all_changes": [
+          {
+            "id": 5,
+            "listing_id": "fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
+            "car_key": "porsche_991_gt3_mkii",
+            "old_price": 169900,
+            "new_price": 164900,
+            "delta_eur": -5000,
+            "delta_pct": -2.94,
+            "changed_at": "2026-03-31T09:52:00",
+            "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-gt3-4-0-500-essence-blanc-fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
+            "vendeur_nom": "MS MOTORS",
+            "vendeur_ville": "Cannes"
+          }
+        ],
         "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-gt3-4-0-500-essence-blanc-fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
         "vendeur_nom": "MS MOTORS",
-        "score_global": 67.1,
-        "couleur": "Blanc"
+        "score_global": 65.8,
+        "couleur": null
       },
       {
         "id": "8ea4c8ae-e358-4e92-86df-cca11d8172e6",
@@ -439,10 +544,26 @@
         "new_price": 171900,
         "delta_eur": -600,
         "delta_pct": -0.35,
+        "last_change_at": "2026-03-31T09:52:00",
+        "all_changes": [
+          {
+            "id": 6,
+            "listing_id": "8ea4c8ae-e358-4e92-86df-cca11d8172e6",
+            "car_key": "porsche_991_gt3_mkii",
+            "old_price": 172500,
+            "new_price": 171900,
+            "delta_eur": -600,
+            "delta_pct": -0.35,
+            "changed_at": "2026-03-31T09:52:00",
+            "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-essence-rouge-8ea4c8ae-e358-4e92-86df-cca11d8172e6",
+            "vendeur_nom": "Overdrive",
+            "vendeur_ville": "Venelles"
+          }
+        ],
         "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-essence-rouge-8ea4c8ae-e358-4e92-86df-cca11d8172e6",
         "vendeur_nom": "Overdrive",
-        "score_global": 71.1,
-        "couleur": "Rouge Indien - Indian Rot"
+        "score_global": 55.8,
+        "couleur": null
       },
       {
         "id": "13bc900e-5235-4309-98b9-4819e063074d",
@@ -450,13 +571,56 @@
         "new_price": 162900,
         "delta_eur": -3000,
         "delta_pct": -1.81,
+        "last_change_at": "2026-03-31T09:52:00",
+        "all_changes": [
+          {
+            "id": 7,
+            "listing_id": "13bc900e-5235-4309-98b9-4819e063074d",
+            "car_key": "porsche_991_gt3_mkii",
+            "old_price": 165900,
+            "new_price": 162900,
+            "delta_eur": -3000,
+            "delta_pct": -1.81,
+            "changed_at": "2026-03-31T09:52:00",
+            "url": "https://www.autoscout24.fr/offres/porsche-911-4-0-500ch-gt3-pdk-essence-13bc900e-5235-4309-98b9-4819e063074d",
+            "vendeur_nom": "PORSCHE REIMS - AUTOSPHERE",
+            "vendeur_ville": "Thillois"
+          }
+        ],
         "url": "https://www.autoscout24.fr/offres/porsche-911-4-0-500ch-gt3-pdk-essence-13bc900e-5235-4309-98b9-4819e063074d",
         "vendeur_nom": "PORSCHE REIMS - AUTOSPHERE",
-        "score_global": 57.3,
-        "couleur": "Blanc"
+        "score_global": 46.1,
+        "couleur": null
+      },
+      {
+        "id": "28bd01b7-f779-4982-a5a9-a16b42abf33f",
+        "old_price": 183990,
+        "new_price": 179990,
+        "delta_eur": -4000,
+        "delta_pct": -2.17,
+        "last_change_at": "2026-04-05T18:48:02.336727",
+        "all_changes": [
+          {
+            "id": 8,
+            "listing_id": "28bd01b7-f779-4982-a5a9-a16b42abf33f",
+            "car_key": "porsche_991_gt3_mkii",
+            "old_price": 183990,
+            "new_price": 179990,
+            "delta_eur": -4000,
+            "delta_pct": -2.17,
+            "changed_at": "2026-04-05T18:48:02.336727",
+            "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-2-4-0i-gt3-touring-essence-noir-28bd01b7-f779-4982-a5a9-a16b42abf33f",
+            "vendeur_nom": "CarJager",
+            "vendeur_ville": "Aix-en-Provence"
+          }
+        ],
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-2-4-0i-gt3-touring-essence-noir-28bd01b7-f779-4982-a5a9-a16b42abf33f",
+        "vendeur_nom": "CarJager",
+        "score_global": 58.3,
+        "couleur": null
       }
     ],
-    "unchanged": 16
+    "unchanged": 13
   }
 }
 </script>
@@ -469,39 +633,44 @@
   "porsche_991_gt3_mkii": {
     "brand": "Porsche",
     "label": "911 GT3 MkII",
-    "updated": "2026-03-31",
+    "updated": "2026-04-05",
     "listings": [
       {
-        "id": "b19ba0ce-e353-4346-97be-e202d4fda9e1",
-        "prix": 165900,
-        "km": 29200,
+        "id": "52deea92-bf95-4e78-9d4f-ebb7526b5801",
+        "prix": 172900,
+        "km": 18900,
         "annee": 2018,
         "tx_clean": "PDK",
-        "couleur": "BLEU MIAMI",
+        "couleur": "Rouge Indien",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
           "pack_clubsport",
+          "baquets_918",
+          "cuir_etendu",
+          "surpiqures",
+          "pdls_plus",
+          "appuie_tete_logo",
           "chrono_package"
         ],
-        "score_global": 66.7,
+        "score_global": 76.3,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 36,
+          "options_incontournables": 74,
           "transmission": 60,
-          "couleur": 50,
+          "couleur": 65,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Chrono | 29,200km sweet spot",
-        "vendeur_nom": "CLUB SPORT RACING",
-        "vendeur_ville": "CIRY-SALSOGNE",
-        "vendeur_dept": "02",
+        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Surpiqûres | PDLS+ | Appuie-tête logo | Chrono | 18,900km sweet spot | Rouge Indien (ok)",
+        "vendeur_nom": "SELECT AUTOMOBILES",
+        "vendeur_ville": "Les Achards",
+        "vendeur_dept": "85",
         "pays": "FR",
         "malus_etranger": 0,
         "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-4-0l-500cv-clubsport-pack-chrono-lift-essence-bleu-b19ba0ce-e353-4346-97be-e202d4fda9e1"
+        "url": "https://www.autoscout24.fr/offres/porsche-911-porsche-991-gt3-4-0l-500ch-essence-rouge-52deea92-bf95-4e78-9d4f-ebb7526b5801"
       },
       {
         "id": "d67fab55-0856-455d-8ee4-42e69e92e3c2",
@@ -512,24 +681,19 @@
         "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "pack_clubsport",
-          "pdls_plus",
-          "appuie_tete_logo",
-          "chrono_package",
-          "siege_sport_malus",
           "touring"
         ],
-        "score_global": 67.6,
+        "score_global": 62.8,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 22,
+          "options_incontournables": 0,
           "transmission": 100,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | Manuelle +++ | Clubsport | PDLS+ | Appuie-tête logo | Chrono | Touring | Siège sport (malus) | 24,600km sweet spot",
+        "score_explication": "Prix correct | Manuelle +++ | Touring | 24,600km sweet spot",
         "vendeur_nom": "GT COLLECTION VILENEUVE D'ASCQ",
         "vendeur_ville": "Villeneuve-d'Ascq",
         "vendeur_dept": "59",
@@ -539,101 +703,27 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-touring-essence-d67fab55-0856-455d-8ee4-42e69e92e3c2"
       },
       {
-        "id": "7f61f241-0900-4ffa-9fce-6a6a83b0d93a",
-        "prix": 178000,
-        "km": 19000,
-        "annee": 2018,
-        "tx_clean": "PDK",
-        "couleur": "Craie",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 76.0,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 100,
-          "options_incontournables": 71,
-          "transmission": 60,
-          "couleur": 70,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Pack Carbone | Surpiqûres | PDLS+ | Jantes noires | Chrono | 19,000km sweet spot | Craie (premium)",
-        "vendeur_nom": "PASSION RS AUTOMOBILES",
-        "vendeur_ville": "SAINT AGNAN",
-        "vendeur_dept": "71",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-gt3-4-0i-pdk-essence-gris-7f61f241-0900-4ffa-9fce-6a6a83b0d93a"
-      },
-      {
-        "id": "d4bcd08c-abd7-4562-bdd0-ff2dae972937",
-        "prix": 169990,
-        "km": 16320,
-        "annee": 2018,
-        "tx_clean": "Manuelle",
-        "couleur": "Jaune",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pdls_plus",
-          "chrono_package"
-        ],
-        "score_global": 66.1,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 100,
-          "options_incontournables": 26,
-          "transmission": 100,
-          "couleur": 20,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | Manuelle +++ | Lift | PDLS+ | Chrono | 16,320km sweet spot | Jaune (malus)",
-        "vendeur_nom": "Car Collection Sales",
-        "vendeur_ville": "LISSIEU",
-        "vendeur_dept": "69",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-4-0-500-ch-41cv-gt3-bvm6-chrono-90l-lift-pdls-regulateur-essence-jaune-d4bcd08c-abd7-4562-bdd0-ff2dae972937"
-      },
-      {
         "id": "4db999ea-e57a-40f6-9532-a7ca20e68042",
         "prix": 166500,
         "km": 33000,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Gris",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "baquets_918",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package",
           "touring"
         ],
-        "score_global": 65.3,
+        "score_global": 55.8,
         "score_detail": {
           "prix_vs_marche": 50,
           "kilometrage": 100,
-          "options_incontournables": 43,
+          "options_incontournables": 0,
           "transmission": 100,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Baquets 918 | PDLS+ | Jantes noires | Chrono | Touring | 33,000km sweet spot",
+        "score_explication": "Prix marché | Manuelle +++ | Touring | 33,000km sweet spot",
         "vendeur_nom": "PASSION AUTOMOBILES",
         "vendeur_ville": "LA BAULE ESCOUBLAC",
         "vendeur_dept": "44",
@@ -648,7 +738,7 @@
         "km": 67400,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "NOIR",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "touring"
@@ -678,28 +768,23 @@
         "km": 43599,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "Rouge",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 68.1,
+        "score_global": 60.4,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 75,
-          "options_incontournables": 68,
+          "options_incontournables": 33,
           "transmission": 60,
           "couleur": 50,
           "annee": 70,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Pack Carbone | Surpiqûres | PDLS+ | Chrono | 43,599km",
+        "score_explication": "Prix correct | PDK | Lift | Clubsport | 43,599km",
         "vendeur_nom": "WEST MOTORS",
         "vendeur_ville": "Dardilly",
         "vendeur_dept": "69",
@@ -709,97 +794,27 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-4-0-500-pdk-francaise-clubsport-lift-carbone-pdl-2b-bose-1622e-mois-essence-rouge-20140952-c8ad-4b40-8b06-bff22142da82"
       },
       {
-        "id": "5bef328d-3454-4e44-8449-425df5330685",
-        "prix": 144999,
-        "km": 42700,
-        "annee": 2018,
-        "tx_clean": "Manuelle",
-        "couleur": "Racing Yellow",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 69.3,
-        "score_detail": {
-          "prix_vs_marche": 100,
-          "kilometrage": 75,
-          "options_incontournables": 29,
-          "transmission": 100,
-          "couleur": 20,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix excellent | Manuelle +++ | Lift | PDLS+ | Jantes noires | Chrono | 42,700km | Racing Yellow (malus)",
-        "vendeur_nom": "PCH Automotive SPRL",
-        "vendeur_ville": "Liège",
-        "vendeur_dept": "59",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-4-0i-manual-xpel-piwi-ok-no-track-essence-jaune-5bef328d-3454-4e44-8449-425df5330685"
-      },
-      {
-        "id": "fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
-        "prix": 164900,
-        "km": 23857,
-        "annee": 2018,
-        "tx_clean": "PDK",
-        "couleur": "Blanc",
-        "carrosserie": null,
-        "options_presentes": [
-          "cuir_etendu",
-          "surpiqures",
-          "chrono_package"
-        ],
-        "score_global": 67.1,
-        "score_detail": {
-          "prix_vs_marche": 100,
-          "kilometrage": 100,
-          "options_incontournables": 17,
-          "transmission": 60,
-          "couleur": 20,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix excellent | PDK | Cuir étendu | Surpiqûres | Chrono | 23,857km sweet spot | Blanc (malus)",
-        "vendeur_nom": "MS MOTORS",
-        "vendeur_ville": "Cannes",
-        "vendeur_dept": "06",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-gt3-4-0-500-essence-blanc-fc89bf97-3082-4c3a-af3d-aeb6cce9d418"
-      },
-      {
         "id": "76110eea-6f1b-4b4a-86be-4237cd0c1507",
         "prix": 184990,
         "km": 27240,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Noir",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "surpiqures",
-          "jantes_noires",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 68.8,
+        "score_global": 59.3,
         "score_detail": {
           "prix_vs_marche": 50,
           "kilometrage": 100,
-          "options_incontournables": 59,
+          "options_incontournables": 16,
           "transmission": 100,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Clubsport | Baquets 918 | Surpiqûres | Jantes noires | Chrono | 27,240km sweet spot",
+        "score_explication": "Prix marché | Manuelle +++ | Clubsport | 27,240km sweet spot",
         "vendeur_nom": "AUTO DEALS",
         "vendeur_ville": "Meyreuil",
         "vendeur_dept": "13",
@@ -809,6 +824,92 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-type-991-2-4-0-gt3-clubsport-500-ch-manuelle-sieges-918-approved-essence-noir-76110eea-6f1b-4b4a-86be-4237cd0c1507"
       },
       {
+        "id": "fc89bf97-3082-4c3a-af3d-aeb6cce9d418",
+        "prix": 164900,
+        "km": 23857,
+        "annee": 2018,
+        "tx_clean": "PDK",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [],
+        "score_global": 65.8,
+        "score_detail": {
+          "prix_vs_marche": 100,
+          "kilometrage": 100,
+          "options_incontournables": 0,
+          "transmission": 60,
+          "couleur": 50,
+          "annee": 85,
+          "historique_service": 50
+        },
+        "score_explication": "Prix excellent | PDK | 23,857km sweet spot",
+        "vendeur_nom": "MS MOTORS",
+        "vendeur_ville": "Cannes",
+        "vendeur_dept": "06",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-gt3-4-0-500-essence-blanc-fc89bf97-3082-4c3a-af3d-aeb6cce9d418"
+      },
+      {
+        "id": "5bef328d-3454-4e44-8449-425df5330685",
+        "prix": 144999,
+        "km": 42700,
+        "annee": 2018,
+        "tx_clean": "Manuelle",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [],
+        "score_global": 65.3,
+        "score_detail": {
+          "prix_vs_marche": 100,
+          "kilometrage": 75,
+          "options_incontournables": 0,
+          "transmission": 100,
+          "couleur": 50,
+          "annee": 85,
+          "historique_service": 50
+        },
+        "score_explication": "Prix excellent | Manuelle +++ | 42,700km",
+        "vendeur_nom": "PCH Automotive SPRL",
+        "vendeur_ville": "Liège",
+        "vendeur_dept": "59",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-4-0i-manual-xpel-piwi-ok-no-track-essence-jaune-5bef328d-3454-4e44-8449-425df5330685"
+      },
+      {
+        "id": "7f4233db-c161-4dc4-8b5d-4af03e6f8174",
+        "prix": 181991,
+        "km": 16679,
+        "annee": 2018,
+        "tx_clean": "Manuelle",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [
+          "touring"
+        ],
+        "score_global": 62.8,
+        "score_detail": {
+          "prix_vs_marche": 75,
+          "kilometrage": 100,
+          "options_incontournables": 0,
+          "transmission": 100,
+          "couleur": 50,
+          "annee": 85,
+          "historique_service": 50
+        },
+        "score_explication": "Prix correct | Manuelle +++ | Touring | 16,679km sweet spot",
+        "vendeur_nom": "WACK AUTOMOBILES",
+        "vendeur_ville": "HAGUENAU",
+        "vendeur_dept": "67",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-touring-4-0l-500-cv-premiere-main-essence-gris-7f4233db-c161-4dc4-8b5d-4af03e6f8174"
+      },
+      {
         "id": "65ebecd6-fb61-4c6d-9a3b-dcf2896f6335",
         "prix": 157990,
         "km": 28800,
@@ -816,22 +917,18 @@
         "tx_clean": "- Boîte",
         "couleur": "—",
         "carrosserie": null,
-        "options_presentes": [
-          "pack_clubsport",
-          "baquets_918",
-          "chrono_package"
-        ],
-        "score_global": 73.1,
+        "options_presentes": [],
+        "score_global": 65.8,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 100,
-          "options_incontournables": 33,
+          "options_incontournables": 0,
           "transmission": 60,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | - Boîte | Clubsport | Baquets 918 | Chrono | 28,800km sweet spot",
+        "score_explication": "Prix excellent | - Boîte | 28,800km sweet spot",
         "vendeur_nom": "Nache Automobiles",
         "vendeur_ville": "Aigné",
         "vendeur_dept": "72",
@@ -841,7 +938,37 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-type-991-2-gt3-essence-65ebecd6-fb61-4c6d-9a3b-dcf2896f6335"
       },
       {
-        "id": "a3339820-e359-4785-9349-f426e5009874",
+        "id": "28bd01b7-f779-4982-a5a9-a16b42abf33f",
+        "prix": 179990,
+        "km": 13300,
+        "annee": 2018,
+        "tx_clean": "Manuelle",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [
+          "touring"
+        ],
+        "score_global": 58.3,
+        "score_detail": {
+          "prix_vs_marche": 75,
+          "kilometrage": 75,
+          "options_incontournables": 0,
+          "transmission": 100,
+          "couleur": 50,
+          "annee": 85,
+          "historique_service": 50
+        },
+        "score_explication": "Prix correct | Manuelle +++ | Touring | 13,300km",
+        "vendeur_nom": "CarJager",
+        "vendeur_ville": "Aix-en-Provence",
+        "vendeur_dept": "13",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-2-4-0i-gt3-touring-essence-noir-28bd01b7-f779-4982-a5a9-a16b42abf33f"
+      },
+      {
+        "id": "347a03f7-1462-495d-b4f0-c9abb3b7d08d",
         "prix": 159900,
         "km": 19400,
         "annee": 2017,
@@ -871,219 +998,7 @@
         "pays": "FR",
         "malus_etranger": 0,
         "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-coupe-991-4-0-500-gt3-essence-blanc-a3339820-e359-4785-9349-f426e5009874"
-      },
-      {
-        "id": "7f4233db-c161-4dc4-8b5d-4af03e6f8174",
-        "prix": 181991,
-        "km": 16679,
-        "annee": 2018,
-        "tx_clean": "Manuelle",
-        "couleur": "CRAIE",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "baquets_918",
-          "pdls_plus",
-          "chrono_package",
-          "touring"
-        ],
-        "score_global": 73.2,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 100,
-          "options_incontournables": 40,
-          "transmission": 100,
-          "couleur": 70,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | Manuelle +++ | Lift | Baquets 918 | PDLS+ | Chrono | Touring | 16,679km sweet spot | CRAIE (premium)",
-        "vendeur_nom": "WACK AUTOMOBILES",
-        "vendeur_ville": "HAGUENAU",
-        "vendeur_dept": "67",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-991-2-gt3-touring-4-0l-500-cv-premiere-main-essence-gris-7f4233db-c161-4dc4-8b5d-4af03e6f8174"
-      },
-      {
-        "id": "28bd01b7-f779-4982-a5a9-a16b42abf33f",
-        "prix": 183990,
-        "km": 13300,
-        "annee": 2018,
-        "tx_clean": "Manuelle",
-        "couleur": "JET MÉTALLISÉ",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "cuir_etendu",
-          "pdls_plus",
-          "chrono_package",
-          "siege_sport_malus",
-          "touring"
-        ],
-        "score_global": 57.7,
-        "score_detail": {
-          "prix_vs_marche": 50,
-          "kilometrage": 75,
-          "options_incontournables": 29,
-          "transmission": 100,
-          "couleur": 50,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Cuir étendu | PDLS+ | Chrono | Touring | Siège sport (malus) | 13,300km",
-        "vendeur_nom": "CarJager",
-        "vendeur_ville": "Aix-en-Provence",
-        "vendeur_dept": "13",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-991-2-4-0i-gt3-touring-essence-noir-28bd01b7-f779-4982-a5a9-a16b42abf33f"
-      },
-      {
-        "id": "b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
-        "prix": 179980,
-        "km": 19800,
-        "annee": 2017,
-        "tx_clean": "PDK",
-        "couleur": "Bleu Graphite Métallisé",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "cuir_etendu",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 75.0,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 100,
-          "options_incontournables": 79,
-          "transmission": 60,
-          "couleur": 50,
-          "annee": 70,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Pack Carbone | Surpiqûres | PDLS+ | Jantes noires | Chrono | 19,800km sweet spot",
-        "vendeur_nom": "Sitbon Automobiles",
-        "vendeur_ville": "Saint-Egreve",
-        "vendeur_dept": "38",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-991-991-phase-2-gt3-4-0-500-pdk--graphite--26ke-doptions--pepita--lift--no-fap--991-2-essence-bleu-b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d"
-      },
-      {
-        "id": "2fe75ec9-2e7a-4277-a0d7-aca6f6846e6a",
-        "prix": 169990,
-        "km": 12000,
-        "annee": 2018,
-        "tx_clean": "Manuelle",
-        "couleur": "Bleu Saphir",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "cuir_etendu",
-          "pdls_plus",
-          "appuie_tete_logo",
-          "chrono_package",
-          "siege_sport_malus",
-          "touring"
-        ],
-        "score_global": 68.9,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 75,
-          "options_incontournables": 48,
-          "transmission": 100,
-          "couleur": 50,
-          "annee": 85,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | Manuelle +++ | Lift | Clubsport | Cuir étendu | PDLS+ | Appuie-tête logo | Chrono | Touring | Siège sport (malus) | 12,000km",
-        "vendeur_nom": "AUTO EXCLUSIVE 67",
-        "vendeur_ville": "Selestat",
-        "vendeur_dept": "67",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-type-991-gt3-touring-4-0-pdk-500-cv-essence-bleu-2fe75ec9-2e7a-4277-a0d7-aca6f6846e6a"
-      },
-      {
-        "id": "fb675a07-8551-44b8-97fc-f3b2e54feac1",
-        "prix": 154990,
-        "km": 31469,
-        "annee": 2017,
-        "tx_clean": "Manuelle",
-        "couleur": "Bleu",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "cuir_etendu",
-          "chrono_package"
-        ],
-        "score_global": 74.6,
-        "score_detail": {
-          "prix_vs_marche": 75,
-          "kilometrage": 100,
-          "options_incontournables": 59,
-          "transmission": 100,
-          "couleur": 50,
-          "annee": 70,
-          "historique_service": 50
-        },
-        "score_explication": "Prix correct | Manuelle +++ | Lift | Clubsport | Baquets 918 | Cuir étendu | Chrono | 31,469km sweet spot",
-        "vendeur_nom": "Silver Lac SAS",
-        "vendeur_ville": "Saint Laurent du Var",
-        "vendeur_dept": "06",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-gt3-clubsport-991-991-2-4-0-500-type-991-phase-2-cg-francaise-historique-complet-essence-bleu-fb675a07-8551-44b8-97fc-f3b2e54feac1"
-      },
-      {
-        "id": "79afc99a-46b3-4f3d-a3c2-83fb2cca13a8",
-        "prix": 170000,
-        "km": 34000,
-        "annee": 2017,
-        "tx_clean": "PDK",
-        "couleur": "Bleu Miami",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "pdls_plus",
-          "chrono_package"
-        ],
-        "score_global": 62.9,
-        "score_detail": {
-          "prix_vs_marche": 50,
-          "kilometrage": 100,
-          "options_incontournables": 56,
-          "transmission": 60,
-          "couleur": 50,
-          "annee": 70,
-          "historique_service": 50
-        },
-        "score_explication": "Prix marché | PDK | Lift | Clubsport | Baquets 918 | PDLS+ | Chrono | 34,000km sweet spot",
-        "vendeur_nom": "PASSION RS AUTOMOBILES",
-        "vendeur_ville": "SAINT AGNAN",
-        "vendeur_dept": "71",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-gt3-4-0i-pdk-essence-bleu-79afc99a-46b3-4f3d-a3c2-83fb2cca13a8"
+        "url": "https://www.autoscout24.fr/offres/porsche-991-coupe-991-4-0-500-gt3-essence-blanc-347a03f7-1462-495d-b4f0-c9abb3b7d08d"
       },
       {
         "id": "13bc900e-5235-4309-98b9-4819e063074d",
@@ -1091,27 +1006,20 @@
         "km": 46131,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "Blanc",
+        "couleur": "—",
         "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "surpiqures",
-          "pdls_plus",
-          "jantes_noires"
-        ],
-        "score_global": 57.3,
+        "options_presentes": [],
+        "score_global": 46.1,
         "score_detail": {
           "prix_vs_marche": 50,
           "kilometrage": 75,
-          "options_incontournables": 62,
+          "options_incontournables": 0,
           "transmission": 60,
-          "couleur": 20,
+          "couleur": 50,
           "annee": 70,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | PDK | Lift | Clubsport | Baquets 918 | Surpiqûres | PDLS+ | Jantes noires | 46,131km | Blanc (malus)",
+        "score_explication": "Prix marché | PDK | 46,131km",
         "vendeur_nom": "PORSCHE REIMS - AUTOSPHERE",
         "vendeur_ville": "Thillois",
         "vendeur_dept": "51",
@@ -1121,34 +1029,85 @@
         "url": "https://www.autoscout24.fr/offres/porsche-911-4-0-500ch-gt3-pdk-essence-13bc900e-5235-4309-98b9-4819e063074d"
       },
       {
+        "id": "b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d",
+        "prix": 179980,
+        "km": 19800,
+        "annee": 2017,
+        "tx_clean": "PDK",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [
+          "leve_roue_avant"
+        ],
+        "score_global": 61.3,
+        "score_detail": {
+          "prix_vs_marche": 75,
+          "kilometrage": 100,
+          "options_incontournables": 17,
+          "transmission": 60,
+          "couleur": 50,
+          "annee": 70,
+          "historique_service": 50
+        },
+        "score_explication": "Prix correct | PDK | Lift | 19,800km sweet spot",
+        "vendeur_nom": "Sitbon Automobiles",
+        "vendeur_ville": "Saint-Egreve",
+        "vendeur_dept": "38",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-phase-2-gt3-4-0-500-pdk--graphite--26ke-doptions--pepita--lift--no-fap--991-2-essence-bleu-b1f3ca76-6dbc-48e8-a9c2-ceabc43f7e0d"
+      },
+      {
+        "id": "79afc99a-46b3-4f3d-a3c2-83fb2cca13a8",
+        "prix": 170000,
+        "km": 34000,
+        "annee": 2017,
+        "tx_clean": "PDK",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [],
+        "score_global": 50.6,
+        "score_detail": {
+          "prix_vs_marche": 50,
+          "kilometrage": 100,
+          "options_incontournables": 0,
+          "transmission": 60,
+          "couleur": 50,
+          "annee": 70,
+          "historique_service": 50
+        },
+        "score_explication": "Prix marché | PDK | 34,000km sweet spot",
+        "vendeur_nom": "PASSION RS AUTOMOBILES",
+        "vendeur_ville": "SAINT AGNAN",
+        "vendeur_dept": "71",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-gt3-4-0i-pdk-essence-bleu-79afc99a-46b3-4f3d-a3c2-83fb2cca13a8"
+      },
+      {
         "id": "1cfd8620-61dd-43d7-8d4b-ef0ab97db4d3",
         "prix": 169990,
         "km": 17390,
         "annee": 2018,
         "tx_clean": "PDK",
-        "couleur": "Argent",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "cuir_etendu",
-          "surpiqures",
-          "pdls_plus",
-          "appuie_tete_logo",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 75.1,
+        "score_global": 62.3,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 74,
+          "options_incontournables": 16,
           "transmission": 60,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Surpiqûres | PDLS+ | Appuie-tête logo | Chrono | 17,390km sweet spot",
+        "score_explication": "Prix correct | PDK | Clubsport | 17,390km sweet spot",
         "vendeur_nom": "AutoScout24 Luxembourg",
         "vendeur_ville": "Metz",
         "vendeur_dept": "57",
@@ -1163,27 +1122,22 @@
         "km": 11500,
         "annee": 2018,
         "tx_clean": "PDK",
-        "couleur": "GRIS C",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "surpiqures",
-          "baquets_rabattables",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 67.3,
+        "score_global": 57.8,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 75,
-          "options_incontournables": 59,
+          "options_incontournables": 16,
           "transmission": 60,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Surpiqûres | Baquets rbt. | Chrono | 11,500km",
+        "score_explication": "Prix correct | PDK | Clubsport | 11,500km",
         "vendeur_nom": "MECANICUS",
         "vendeur_ville": "Paris",
         "vendeur_dept": "75",
@@ -1198,24 +1152,20 @@
         "km": 41900,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "GRIS",
+        "couleur": "—",
         "carrosserie": null,
-        "options_presentes": [
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 55.5,
+        "options_presentes": [],
+        "score_global": 53.1,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 75,
-          "options_incontournables": 11,
+          "options_incontournables": 0,
           "transmission": 60,
           "couleur": 50,
           "annee": 70,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | PDLS+ | Jantes noires | Chrono | 41,900km",
+        "score_explication": "Prix correct | PDK | 41,900km",
         "vendeur_nom": "Factory Automobiles",
         "vendeur_ville": "Seichamps",
         "vendeur_dept": "54",
@@ -1230,25 +1180,20 @@
         "km": 42700,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Racing Yellow",
+        "couleur": "—",
         "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 69.3,
+        "options_presentes": [],
+        "score_global": 65.3,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 75,
-          "options_incontournables": 29,
+          "options_incontournables": 0,
           "transmission": 100,
-          "couleur": 20,
+          "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | Manuelle +++ | Lift | PDLS+ | Jantes noires | Chrono | 42,700km | Racing Yellow (malus)",
+        "score_explication": "Prix excellent | Manuelle +++ | 42,700km",
         "vendeur_nom": "PCH Automotive SPRL",
         "vendeur_ville": "Liège",
         "vendeur_dept": "59",
@@ -1263,30 +1208,22 @@
         "km": 31000,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Rouge Indien - Indian Rot",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "baquets_918",
-          "cuir_etendu",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
-          "appuie_tete_logo",
-          "chrono_package",
           "touring"
         ],
-        "score_global": 71.1,
+        "score_global": 55.8,
         "score_detail": {
           "prix_vs_marche": 50,
           "kilometrage": 100,
-          "options_incontournables": 64,
+          "options_incontournables": 0,
           "transmission": 100,
-          "couleur": 65,
+          "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Baquets 918 | Cuir étendu | Pack Carbone | Surpiqûres | PDLS+ | Appuie-tête logo | Chrono | Touring | 31,000km sweet spot | Rouge Indien - Indian Rot (ok)",
+        "score_explication": "Prix marché | Manuelle +++ | Touring | 31,000km sweet spot",
         "vendeur_nom": "Overdrive",
         "vendeur_ville": "Venelles",
         "vendeur_dept": "13",
@@ -1301,27 +1238,23 @@
         "km": 31841,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "Gris Argent GT",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "cuir_etendu",
-          "surpiqures",
-          "chrono_package"
+          "baquets_918"
         ],
-        "score_global": 73.5,
+        "score_global": 64.6,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 65,
+          "options_incontournables": 32,
           "transmission": 60,
-          "couleur": 70,
+          "couleur": 50,
           "annee": 70,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Cuir étendu | Surpiqûres | Chrono | 31,841km sweet spot | Gris Argent GT (premium)",
+        "score_explication": "Prix correct | PDK | Lift | Baquets 918 | 31,841km sweet spot",
         "vendeur_nom": "MY EXCLUSIVE CAR",
         "vendeur_ville": "LISSIEU",
         "vendeur_dept": "69",
@@ -1331,30 +1264,56 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-911-gt3-ph-2-4-0i-pdk-lift-baquets-carbone-918-essence-argent-0d7f5262-68d0-431b-8dc9-08fe6ad6c683"
       },
       {
+        "id": "7f61f241-0900-4ffa-9fce-6a6a83b0d93a",
+        "prix": 178000,
+        "km": 19000,
+        "annee": 2018,
+        "tx_clean": "PDK",
+        "couleur": "—",
+        "carrosserie": null,
+        "options_presentes": [],
+        "score_global": 58.8,
+        "score_detail": {
+          "prix_vs_marche": 75,
+          "kilometrage": 100,
+          "options_incontournables": 0,
+          "transmission": 60,
+          "couleur": 50,
+          "annee": 85,
+          "historique_service": 50
+        },
+        "score_explication": "Prix correct | PDK | 19,000km sweet spot",
+        "vendeur_nom": "PASSION RS AUTOMOBILES",
+        "vendeur_ville": "SAINT AGNAN",
+        "vendeur_dept": "71",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-911-911-gt3-4-0i-pdk-essence-gris-7f61f241-0900-4ffa-9fce-6a6a83b0d93a"
+      },
+      {
         "id": "adde7034-fff1-4fd8-988a-9b6f154c6153",
         "prix": 154900,
         "km": 20800,
         "annee": 2018,
         "tx_clean": "PDK",
-        "couleur": "Blanc",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 74.6,
+        "score_global": 73.1,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 100,
-          "options_incontournables": 51,
+          "options_incontournables": 33,
           "transmission": 60,
-          "couleur": 20,
+          "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | PDK | Lift | Clubsport | Baquets 918 | Chrono | 20,800km sweet spot | Blanc (malus)",
+        "score_explication": "Prix excellent | PDK | Lift | Clubsport | 20,800km sweet spot",
         "vendeur_nom": "Dream Car Performance",
         "vendeur_ville": "SAINT LAURENT DU VAR",
         "vendeur_dept": "06",
@@ -1364,38 +1323,36 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-pdk-origine-france-pack-clubsport-lift-ppf-essence-blanc-adde7034-fff1-4fd8-988a-9b6f154c6153"
       },
       {
-        "id": "2ac9d93f-d070-4dab-8f65-3adee343912e",
-        "prix": 189900,
-        "km": 20500,
+        "id": "d4bcd08c-abd7-4562-bdd0-ff2dae972937",
+        "prix": 169990,
+        "km": 16320,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Noir",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
-          "baquets_918",
-          "appuie_tete_logo",
-          "chrono_package",
-          "touring"
+          "pdls_plus",
+          "chrono_package"
         ],
-        "score_global": 64.2,
+        "score_global": 68.5,
         "score_detail": {
-          "prix_vs_marche": 50,
+          "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 38,
+          "options_incontournables": 26,
           "transmission": 100,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Baquets 918 | Appuie-tête logo | Chrono | Touring | 20,500km sweet spot",
-        "vendeur_nom": "ELEVEN CARS",
-        "vendeur_ville": "PARIS",
-        "vendeur_dept": "75",
+        "score_explication": "Prix correct | Manuelle +++ | Lift | PDLS+ | Chrono | 16,320km sweet spot",
+        "vendeur_nom": "Car Collection Sales",
+        "vendeur_ville": "LISSIEU",
+        "vendeur_dept": "69",
         "pays": "FR",
         "malus_etranger": 0,
         "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-911-4-0i-gt3-touring-essence-noir-2ac9d93f-d070-4dab-8f65-3adee343912e"
+        "url": "https://www.autoscout24.fr/offres/porsche-991-991-4-0-500-ch-41cv-gt3-bvm6-chrono-90l-lift-pdls-regulateur-essence-jaune-d4bcd08c-abd7-4562-bdd0-ff2dae972937"
       },
       {
         "id": "6a6d45fb-78ba-4205-974e-cf25c347e247",
@@ -1403,29 +1360,22 @@
         "km": 3050,
         "annee": 2018,
         "tx_clean": "PDK",
-        "couleur": "Blanc",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "surpiqures",
-          "pdls_plus",
-          "pccb",
-          "appuie_tete_logo",
-          "chrono_package"
+          "pack_clubsport"
         ],
-        "score_global": 71.8,
+        "score_global": 62.1,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 60,
-          "options_incontournables": 71,
+          "options_incontournables": 16,
           "transmission": 60,
-          "couleur": 20,
+          "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | PDK | Lift | Clubsport | Baquets 918 | Surpiqûres | PDLS+ | PCCB | Appuie-tête logo | Chrono | 3,050km (faible km) | Blanc (malus)",
+        "score_explication": "Prix excellent | PDK | Clubsport | 3,050km (faible km)",
         "vendeur_nom": "AutoScout24 Luxembourg",
         "vendeur_ville": "Metz",
         "vendeur_dept": "57",
@@ -1435,72 +1385,29 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-991-2-gt3-clubsport-pdk-essence-blanc-6a6d45fb-78ba-4205-974e-cf25c347e247"
       },
       {
-        "id": "905c3471-60eb-4b52-98f4-3e0710672c90",
-        "prix": 188490,
-        "km": 17000,
-        "annee": 2017,
-        "tx_clean": "Manuelle",
-        "couleur": "Rouge",
-        "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "baquets_918",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
-          "jantes_noires",
-          "chrono_package"
-        ],
-        "score_global": 70.2,
-        "score_detail": {
-          "prix_vs_marche": 50,
-          "kilometrage": 100,
-          "options_incontournables": 71,
-          "transmission": 100,
-          "couleur": 50,
-          "annee": 70,
-          "historique_service": 50
-        },
-        "score_explication": "Prix marché | Manuelle +++ | Lift | Clubsport | Baquets 918 | Pack Carbone | Surpiqûres | PDLS+ | Jantes noires | Chrono | 17,000km sweet spot",
-        "vendeur_nom": "Quatre Vingt Dix Neuf",
-        "vendeur_ville": "ANDREZIEUX-BOUTHEON",
-        "vendeur_dept": "42",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/porsche-911-coupe-4-0-gt3-flat-6-500ch-manuelle-baquets-carbone-livraison-reprise-credit-essence-rouge-905c3471-60eb-4b52-98f4-3e0710672c90"
-      },
-      {
         "id": "9bce9fe1-4886-4131-922a-bae5cedae2b4",
         "prix": 179900,
         "km": 14225,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Karminrot",
+        "couleur": "—",
         "carrosserie": null,
         "options_presentes": [
           "leve_roue_avant",
-          "pts_couleur",
-          "pack_carbone",
-          "surpiqures",
-          "pdls_plus",
           "pccb",
-          "chrono_package",
-          "siege_sport_malus",
           "touring"
         ],
-        "score_global": 72.4,
+        "score_global": 63.4,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 75,
-          "options_incontournables": 46,
+          "options_incontournables": 23,
           "transmission": 100,
-          "couleur": 100,
+          "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | Manuelle +++ | Lift | PTS | Pack Carbone | Surpiqûres | PDLS+ | PCCB | Chrono | Touring | Siège sport (malus) | 14,225km | Karminrot (PTS)",
+        "score_explication": "Prix correct | Manuelle +++ | Lift | PCCB | Touring | 14,225km",
         "vendeur_nom": "AutoScout24 Luxembourg",
         "vendeur_ville": "Metz",
         "vendeur_dept": "57",
@@ -1510,29 +1417,58 @@
         "url": "https://www.autoscout24.fr/offres/porsche-991-2-gt3-touring-pccb-approved-lift-led-no-opf-essence-rouge-9bce9fe1-4886-4131-922a-bae5cedae2b4"
       },
       {
+        "id": "eb3649d5-8364-4f72-92c3-f53d62c9d24d",
+        "prix": 168990,
+        "km": 18682,
+        "annee": 2017,
+        "tx_clean": "PDK",
+        "couleur": "Argent GT métallisé",
+        "carrosserie": null,
+        "options_presentes": [
+          "leve_roue_avant",
+          "pack_clubsport",
+          "baquets_918",
+          "chrono_package"
+        ],
+        "score_global": 70.4,
+        "score_detail": {
+          "prix_vs_marche": 75,
+          "kilometrage": 100,
+          "options_incontournables": 51,
+          "transmission": 60,
+          "couleur": 70,
+          "annee": 70,
+          "historique_service": 50
+        },
+        "score_explication": "Prix correct | PDK | Lift | Clubsport | Baquets 918 | Chrono | 18,682km sweet spot | Argent GT métallisé (premium)",
+        "vendeur_nom": "VOGEL DIFFUSION",
+        "vendeur_ville": "ENTZHEIM",
+        "vendeur_dept": "67",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/porsche-991-gt3-500-cv-pdk-essence-argent-eb3649d5-8364-4f72-92c3-f53d62c9d24d"
+      },
+      {
         "id": "deb1e25c-8454-43f7-94e2-098a184a2785",
         "prix": 135000,
         "km": 35000,
         "annee": 2018,
         "tx_clean": "Manuelle",
-        "couleur": "Argent",
+        "couleur": "—",
         "carrosserie": null,
-        "options_presentes": [
-          "leve_roue_avant",
-          "pack_clubsport",
-          "pack_carbone"
-        ],
-        "score_global": 78.4,
+        "options_presentes": [],
+        "score_global": 69.8,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 100,
-          "options_incontournables": 39,
+          "options_incontournables": 0,
           "transmission": 100,
           "couleur": 50,
           "annee": 85,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | Manuelle +++ | Lift | Clubsport | Pack Carbone | 35,000km sweet spot",
+        "score_explication": "Prix excellent | Manuelle +++ | 35,000km sweet spot",
         "vendeur_nom": "",
         "vendeur_ville": "75",
         "vendeur_dept": "75",
@@ -1546,7 +1482,7 @@
   "mclaren_675lt": {
     "brand": "McLaren",
     "label": "675LT",
-    "updated": "2026-03-31",
+    "updated": "2026-04-05",
     "listings": [
       {
         "id": "3b46a187-7bdd-46cc-bd53-4aa346598210",
@@ -1554,53 +1490,14 @@
         "km": 9600,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "Titanium Silver",
+        "couleur": "—",
         "carrosserie": "Spider",
         "options_presentes": [
-          "nose_lift",
-          "carbon_exterior_pack",
-          "mso_clubsport",
-          "p1_seats",
-          "contrast_stitching",
-          "meridian_audio",
-          "super_lightweight_wheels",
-          "rear_camera",
-          "spider",
-          "coupe"
+          "spider"
         ],
-        "score_global": 75.5,
+        "score_global": 65.0,
         "score_detail": {
           "prix_vs_marche": 100,
-          "kilometrage": 100,
-          "options_incontournables": 45,
-          "transmission": 80,
-          "couleur": 55,
-          "annee": 80,
-          "historique_service": 50
-        },
-        "score_explication": "Prix excellent | PDK | Nose Lift | MSO Clubsport | Pack Carbone Ext. | Sièges P1 Carbone | Coutures Contrastées | Audio Meridian | Jantes Ultra-Légères | Caméra Recul | Spider | Coupé | 9,600km sweet spot | Spider",
-        "vendeur_nom": "L'art de l'automobile",
-        "vendeur_ville": "Paris",
-        "vendeur_dept": "75",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-spider-v8-3-8-675-ch-titanium-silver-9-600-km-essence-argent-3b46a187-7bdd-46cc-bd53-4aa346598210"
-      },
-      {
-        "id": "dce65020-6cec-4a81-b40d-fb93e7918a33",
-        "prix": 335000,
-        "km": 4400,
-        "annee": 2015,
-        "tx_clean": "Manuelle",
-        "couleur": "—",
-        "carrosserie": "Coupé",
-        "options_presentes": [
-          "coupe"
-        ],
-        "score_global": 51.0,
-        "score_detail": {
-          "prix_vs_marche": 50,
           "kilometrage": 100,
           "options_incontournables": 0,
           "transmission": 80,
@@ -1608,14 +1505,14 @@
           "annee": 80,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | Manuelle +++ | Coupé | 4,400km sweet spot | Coupé",
-        "vendeur_nom": "GARAGE DU PANORAMA",
-        "vendeur_ville": "CABRIS",
-        "vendeur_dept": "06",
+        "score_explication": "Prix excellent | PDK | Spider | 9,600km sweet spot | Spider",
+        "vendeur_nom": "L'art de l'automobile",
+        "vendeur_ville": "Paris",
+        "vendeur_dept": "75",
         "pays": "FR",
         "malus_etranger": 0,
         "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-coupe-v8-3-8-675-ch-essence-gris-dce65020-6cec-4a81-b40d-fb93e7918a33"
+        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-spider-v8-3-8-675-ch-titanium-silver-9-600-km-essence-argent-3b46a187-7bdd-46cc-bd53-4aa346598210"
       },
       {
         "id": "302f1e73-9087-4aaa-bf76-5acded7a80b1",
@@ -1626,27 +1523,19 @@
         "couleur": "—",
         "carrosserie": "Spider",
         "options_presentes": [
-          "nose_lift",
-          "carbon_exterior_pack",
-          "p1_seats",
-          "carbon_interior_pack",
-          "contrast_stitching",
-          "meridian_audio",
-          "mso_colour",
-          "super_lightweight_wheels",
           "spider"
         ],
-        "score_global": 82.6,
+        "score_global": 59.2,
         "score_detail": {
           "prix_vs_marche": 75,
           "kilometrage": 100,
-          "options_incontournables": 79,
+          "options_incontournables": 0,
           "transmission": 80,
-          "couleur": 100,
+          "couleur": 50,
           "annee": 100,
           "historique_service": 50
         },
-        "score_explication": "Prix correct | PDK | Couleur MSO Bespoke | Nose Lift | Pack Carbone Ext. | Sièges P1 Carbone | Pack Carbone Int. | Coutures Contrastées | Audio Meridian | Jantes Ultra-Légères | Spider | 10,900km sweet spot | Spider",
+        "score_explication": "Prix correct | PDK | Spider | 10,900km sweet spot | Spider",
         "vendeur_nom": "ASPHALT CLASSICS",
         "vendeur_ville": "ORGON",
         "vendeur_dept": "13",
@@ -1656,68 +1545,28 @@
         "url": "https://www.autoscout24.fr/offres/mclaren-675lt-mclaren-675lt-spider-v8-3-8-675-ch-essence-302f1e73-9087-4aaa-bf76-5acded7a80b1"
       },
       {
-        "id": "973b1183-a8c7-46b0-bdd3-d4e6fdb97e79",
-        "prix": 269900,
-        "km": 29700,
-        "annee": 2017,
-        "tx_clean": "PDK",
-        "couleur": "Bleu",
-        "carrosserie": "Spider",
-        "options_presentes": [
-          "nose_lift",
-          "meridian_audio",
-          "rear_camera",
-          "spider"
-        ],
-        "score_global": 44.2,
-        "score_detail": {
-          "prix_vs_marche": 50,
-          "kilometrage": 40,
-          "options_incontournables": 18,
-          "transmission": 80,
-          "couleur": 50,
-          "annee": 80,
-          "historique_service": 50
-        },
-        "score_explication": "Prix marché | PDK | Nose Lift | Audio Meridian | Caméra Recul | Spider | 29,700km | Spider",
-        "vendeur_nom": "MS MOTORS",
-        "vendeur_ville": "Cannes",
-        "vendeur_dept": "06",
-        "pays": "FR",
-        "malus_etranger": 0,
-        "source": "autoscout24",
-        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-mclaren-675lt-spider-v8-3-8-675-ch-essence-bleu-973b1183-a8c7-46b0-bdd3-d4e6fdb97e79"
-      },
-      {
         "id": "193601ab-a1c2-497d-b8f5-e49fd668ad54",
         "prix": 309980,
         "km": 9900,
         "annee": 2017,
         "tx_clean": "PDK",
-        "couleur": "Vert",
+        "couleur": "—",
         "carrosserie": "Spider",
         "options_presentes": [
           "nose_lift",
-          "carbon_exterior_pack",
-          "carbon_interior_pack",
-          "contrast_stitching",
-          "meridian_audio",
-          "mso_colour",
-          "super_lightweight_wheels",
-          "rear_camera",
           "spider"
         ],
-        "score_global": 87.5,
+        "score_global": 68.1,
         "score_detail": {
           "prix_vs_marche": 100,
           "kilometrage": 100,
-          "options_incontournables": 75,
+          "options_incontournables": 14,
           "transmission": 80,
-          "couleur": 100,
+          "couleur": 50,
           "annee": 80,
           "historique_service": 50
         },
-        "score_explication": "Prix excellent | PDK | Couleur MSO Bespoke | Nose Lift | Pack Carbone Ext. | Pack Carbone Int. | Coutures Contrastées | Audio Meridian | Jantes Ultra-Légères | Caméra Recul | Spider | 9,900km sweet spot | Vert (PTS) | Spider",
+        "score_explication": "Prix excellent | PDK | Nose Lift | Spider | 9,900km sweet spot | Spider",
         "vendeur_nom": "BEMA VITESSE",
         "vendeur_ville": "Saint-Michel-sur-Orge",
         "vendeur_dept": "91",
@@ -1727,27 +1576,98 @@
         "url": "https://www.autoscout24.fr/offres/mclaren-675lt-spider--malus-paye-napier-green-ppf-complet-carbone-echappement-sport-lift-a-partir-de-2470-mois-essence-vert-193601ab-a1c2-497d-b8f5-e49fd668ad54"
       },
       {
-        "id": "2db599a7-1c26-4ea6-a957-bb88c64237f8",
-        "prix": 259900,
-        "km": 14300,
+        "id": "dce65020-6cec-4a81-b40d-fb93e7918a33",
+        "prix": 335000,
+        "km": 4400,
         "annee": 2015,
-        "tx_clean": "PDK",
-        "couleur": "—",
+        "tx_clean": "Manuelle",
+        "couleur": "MSO",
         "carrosserie": "Coupé",
         "options_presentes": [
+          "nose_lift",
+          "roof_scoop",
+          "contrast_stitching",
+          "meridian_audio",
+          "mso_colour",
+          "super_lightweight_wheels",
+          "rear_camera",
           "coupe"
         ],
-        "score_global": 51.0,
+        "score_global": 72.4,
         "score_detail": {
           "prix_vs_marche": 50,
           "kilometrage": 100,
+          "options_incontournables": 70,
+          "transmission": 80,
+          "couleur": 100,
+          "annee": 80,
+          "historique_service": 50
+        },
+        "score_explication": "Prix marché | Manuelle +++ | Couleur MSO Bespoke | Nose Lift | Scoop Toit (Coupé) | Coutures Contrastées | Audio Meridian | Jantes Ultra-Légères | Caméra Recul | Coupé | 4,400km sweet spot | MSO (PTS) | Coupé",
+        "vendeur_nom": "GARAGE DU PANORAMA",
+        "vendeur_ville": "CABRIS",
+        "vendeur_dept": "06",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-coupe-v8-3-8-675-ch-essence-gris-dce65020-6cec-4a81-b40d-fb93e7918a33"
+      },
+      {
+        "id": "973b1183-a8c7-46b0-bdd3-d4e6fdb97e79",
+        "prix": 269900,
+        "km": 29700,
+        "annee": 2017,
+        "tx_clean": "PDK",
+        "couleur": "—",
+        "carrosserie": "Spider",
+        "options_presentes": [
+          "spider"
+        ],
+        "score_global": 40.2,
+        "score_detail": {
+          "prix_vs_marche": 50,
+          "kilometrage": 40,
           "options_incontournables": 0,
           "transmission": 80,
           "couleur": 50,
           "annee": 80,
           "historique_service": 50
         },
-        "score_explication": "Prix marché | PDK | Coupé | 14,300km sweet spot | Coupé",
+        "score_explication": "Prix marché | PDK | Spider | 29,700km | Spider",
+        "vendeur_nom": "MS MOTORS",
+        "vendeur_ville": "Cannes",
+        "vendeur_dept": "06",
+        "pays": "FR",
+        "malus_etranger": 0,
+        "source": "autoscout24",
+        "url": "https://www.autoscout24.fr/offres/mclaren-675lt-mclaren-675lt-spider-v8-3-8-675-ch-essence-bleu-973b1183-a8c7-46b0-bdd3-d4e6fdb97e79"
+      },
+      {
+        "id": "2db599a7-1c26-4ea6-a957-bb88c64237f8",
+        "prix": 259900,
+        "km": 14300,
+        "annee": 2015,
+        "tx_clean": "PDK",
+        "couleur": "Napier Green",
+        "carrosserie": "Coupé",
+        "options_presentes": [
+          "carbon_exterior_pack",
+          "mso_clubsport",
+          "meridian_audio",
+          "super_lightweight_wheels",
+          "coupe"
+        ],
+        "score_global": 55.6,
+        "score_detail": {
+          "prix_vs_marche": 50,
+          "kilometrage": 100,
+          "options_incontournables": 21,
+          "transmission": 80,
+          "couleur": 50,
+          "annee": 80,
+          "historique_service": 50
+        },
+        "score_explication": "Prix marché | PDK | MSO Clubsport | Pack Carbone Ext. | Audio Meridian | Jantes Ultra-Légères | Coupé | 14,300km sweet spot | Coupé",
         "vendeur_nom": "CMS AUTO",
         "vendeur_ville": "Paris",
         "vendeur_dept": "75",
@@ -2244,14 +2164,19 @@ function renderTable(listings) {
         </div>
       </td>
       ${carCell}
-      <td class="prix">${fmtPrix(l.prix)}${
-        DIFF_NEW_IDS.has(l.id) ? '<span class="badge-new">NEW</span>' :
-        DIFF_PRICE_MAP[l.id] ? (
-          DIFF_PRICE_MAP[l.id].delta_eur < 0
-            ? `<span class="badge-down">↓ ${DIFF_PRICE_MAP[l.id].delta_eur.toLocaleString('fr-FR')}€</span>`
-            : `<span class="badge-up">↑ +${DIFF_PRICE_MAP[l.id].delta_eur.toLocaleString('fr-FR')}€</span>`
-        ) : ''
-      }</td>
+      <td class="prix">${fmtPrix(l.prix)}${(() => {
+        if (DIFF_NEW_IDS.has(l.id)) return '<span class="badge-new">NEW</span>';
+        const pc = DIFF_PRICE_MAP[l.id];
+        if (!pc) return '';
+        const dateStr = pc.last_change_at
+          ? new Date(pc.last_change_at).toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit'})
+          : '';
+        const datePart = dateStr ? `<span class="badge-date">${dateStr}</span>` : '';
+        const click = `onclick="openPriceModal('${l.id}')" style="cursor:pointer" title="Voir l'historique des prix"`;
+        if (pc.delta_eur < 0)
+          return `<span class="badge-down" ${click}>↓ ${pc.delta_eur.toLocaleString('fr-FR')}€</span>${datePart}`;
+        return `<span class="badge-up" ${click}>↑ +${pc.delta_eur.toLocaleString('fr-FR')}€</span>${datePart}`;
+      })()}</td>
       <td>${fmtKm(l.km)}</td>
       <td>${l.annee || '—'}</td>
       <td class="variante-cell"><span class="tx ${txCls}">${txLbl}</span>${bodyTag}</td>
@@ -2319,12 +2244,13 @@ function onBrandChange() {
 }
 
 function filterRows() {
-  const brand  = document.getElementById('brand-filter').value;
-  const model  = document.getElementById('model-filter').value;
-  const tx     = document.getElementById('tx-filter').value;
-  const body   = document.getElementById('body-filter').value;
-  const minSc  = parseFloat(document.getElementById('score-filter').value) || 0;
-  const q      = document.getElementById('search').value.toLowerCase().trim();
+  const brand       = document.getElementById('brand-filter').value;
+  const model       = document.getElementById('model-filter').value;
+  const tx          = document.getElementById('tx-filter').value;
+  const body        = document.getElementById('body-filter').value;
+  const minSc       = parseFloat(document.getElementById('score-filter').value) || 0;
+  const priceFilter = document.getElementById('price-filter').value;
+  const q           = document.getElementById('search').value.toLowerCase().trim();
 
   visibleListings = ALL_LISTINGS.filter(l => {
     if (brand  && l._brand    !== brand)  return false;
@@ -2332,6 +2258,7 @@ function filterRows() {
     if (tx     && !l.tx_clean.includes(tx)) return false;
     if (body   && l.carrosserie !== body) return false;
     if (l.score_global < minSc)           return false;
+    if (priceFilter === 'changed' && !DIFF_PRICE_MAP[l.id]) return false;
     if (q) {
       const hay = [l.couleur, l.score_explication, l.vendeur_nom, l.vendeur_ville,
                    (l.options_presentes||[]).join(' ')].join(' ').toLowerCase();
@@ -2385,6 +2312,168 @@ function sortListings(col, dir) {
 //  Init
 // ═══════════════════════════════════════════════════════════
 renderTable(ALL_LISTINGS);
+</script>
+
+<!-- ── Price history modal ── -->
+<div class="pm-overlay" id="pm-overlay"></div>
+<div class="pm-panel"   id="pm-panel">
+  <div class="pm-header">
+    <button class="pm-close" onclick="closePriceModal()" title="Fermer">✕</button>
+    <h3 id="pm-title">Historique des prix</h3>
+    <p  id="pm-subtitle"></p>
+  </div>
+  <div class="pm-body" id="pm-body"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  Price history modal
+// ═══════════════════════════════════════════════════════════
+
+function openPriceModal(listingId) {
+  const listing = ALL_LISTINGS.find(l => l.id === listingId);
+  const pc      = DIFF_PRICE_MAP[listingId];
+
+  // Title
+  const vendor  = listing?.vendeur_nom && listing.vendeur_nom !== '—' ? listing.vendeur_nom : '—';
+  const couleur = listing?.couleur || '';
+  document.getElementById('pm-title').textContent =
+    (listing ? `${listing._brand} ${listing._label}` : 'Annonce');
+  document.getElementById('pm-subtitle').textContent =
+    [vendor, couleur, listing?.pays || ''].filter(Boolean).join(' · ');
+
+  // Build timeline points
+  // Each point: { date: Date, prix: number, delta: number|null, label: string }
+  const points = [];
+
+  if (pc && pc.all_changes && pc.all_changes.length) {
+    // First known price (before any change)
+    points.push({
+      date:  new Date(pc.all_changes[0].changed_at),
+      prix:  pc.all_changes[0].old_price,
+      delta: null,
+      label: 'Prix initial'
+    });
+    // Each recorded change
+    for (const ch of pc.all_changes) {
+      points.push({
+        date:  new Date(ch.changed_at),
+        prix:  ch.new_price,
+        delta: ch.delta_eur,
+        label: null
+      });
+    }
+  } else if (listing) {
+    // No history recorded — just the current price
+    points.push({ date: new Date(), prix: listing.prix, delta: null, label: 'Prix actuel' });
+  }
+
+  const body = document.getElementById('pm-body');
+
+  if (points.length < 2) {
+    body.innerHTML = `
+      <div class="pm-current-price">${listing ? fmtPrix(listing.prix) : '—'}</div>
+      <p class="pm-no-history">Aucun changement de prix enregistré pour cette annonce.</p>
+      <p style="margin-top:12px">
+        <a href="${listing?.url || '#'}" target="_blank" rel="noopener"
+           style="color:#38bdf8;font-size:12px">Voir l'annonce →</a>
+      </p>`;
+    openPanel();
+    return;
+  }
+
+  // Sparkline SVG
+  const svgW = 300, svgH = 80;
+  const pad  = { l: 8, r: 8, t: 14, b: 8 };
+  const iW   = svgW - pad.l - pad.r;
+  const iH   = svgH - pad.t - pad.b;
+
+  const prices   = points.map(p => p.prix);
+  const minP     = Math.min(...prices);
+  const maxP     = Math.max(...prices);
+  const priceRange = maxP - minP || 1;
+
+  const times    = points.map(p => p.date.getTime());
+  const minT     = Math.min(...times);
+  const maxT     = Math.max(...times);
+  const timeRange  = maxT - minT || 1;
+
+  const px = (t) => pad.l + ((t - minT) / timeRange) * iW;
+  const py = (v) => pad.t + iH - ((v - minP) / priceRange) * iH;
+
+  const pathD = points.map((p, i) =>
+    `${i === 0 ? 'M' : 'L'} ${px(p.date.getTime()).toFixed(1)} ${py(p.prix).toFixed(1)}`
+  ).join(' ');
+
+  const dotsSVG = points.map((p, i) => {
+    const cx    = px(p.date.getTime()).toFixed(1);
+    const cy    = py(p.prix).toFixed(1);
+    const isLast = i === points.length - 1;
+    const color = isLast ? '#38bdf8' : (p.delta !== null && p.delta < 0 ? '#4ade80' : (p.delta !== null && p.delta > 0 ? '#fb923c' : '#94a3b8'));
+    // Price label above/below each dot
+    const textY  = (parseFloat(cy) < pad.t + 16) ? parseFloat(cy) + 14 : parseFloat(cy) - 6;
+    const label  = (prices.length <= 4 || i === 0 || isLast)
+      ? `<text x="${cx}" y="${textY}" text-anchor="middle" font-size="8" fill="${color}"
+              font-family="-apple-system,sans-serif" font-weight="600">
+           ${(p.prix / 1000).toFixed(0)}k
+         </text>`
+      : '';
+    return `<circle cx="${cx}" cy="${cy}" r="${isLast ? 5 : 4}" fill="${color}" stroke="#1e293b" stroke-width="1.5"/>
+            ${label}`;
+  }).join('\n');
+
+  const sparkSVG = `
+    <svg viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+      <path d="${pathD}" fill="none" stroke="#334155" stroke-width="2" stroke-linejoin="round"/>
+      ${dotsSVG}
+    </svg>`;
+
+  // Table rows
+  const tableRows = points.map((p, i) => {
+    const dateStr = p.date.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'2-digit'});
+    const isFirst = i === 0;
+    const deltaCell = p.delta === null
+      ? `<td>—</td>`
+      : p.delta < 0
+        ? `<td class="delta-down">↓ ${p.delta.toLocaleString('fr-FR')}€ (${((p.delta / points[i-1].prix)*100).toFixed(1)}%)</td>`
+        : `<td class="delta-up">↑ +${p.delta.toLocaleString('fr-FR')}€ (+${((p.delta / points[i-1].prix)*100).toFixed(1)}%)</td>`;
+    return `<tr class="${isFirst ? 'row-first' : ''}">
+      <td>${dateStr}</td>
+      <td style="font-weight:700">${fmtPrix(p.prix)}</td>
+      ${deltaCell}
+    </tr>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="pm-spark">${sparkSVG}</div>
+    <table class="pm-table">
+      <thead><tr><th>Date</th><th>Prix</th><th>Variation</th></tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    <p style="margin-top:16px">
+      <a href="${listing?.url || '#'}" target="_blank" rel="noopener"
+         style="color:#38bdf8;font-size:12px">Voir l'annonce →</a>
+    </p>`;
+
+  openPanel();
+}
+
+function openPanel() {
+  document.getElementById('pm-overlay').classList.add('open');
+  document.getElementById('pm-panel').classList.add('open');
+  document.getElementById('pm-overlay').onclick = closePriceModal;
+  document.addEventListener('keydown', _pmEscHandler);
+}
+
+function closePriceModal() {
+  document.getElementById('pm-overlay').classList.remove('open');
+  document.getElementById('pm-panel').classList.remove('open');
+  document.removeEventListener('keydown', _pmEscHandler);
+}
+
+function _pmEscHandler(e) {
+  if (e.key === 'Escape') closePriceModal();
+}
 </script>
 </body>
 </html>
